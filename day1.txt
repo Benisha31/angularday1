@@ -1,0 +1,597 @@
+1. ts
+export class AppComponent {
+  title='Age';
+  count=false;
+  age:number;
+getage(value){
+
+var today = new Date();
+var birthDate = new Date(value);
+var age = today.getFullYear() - birthDate.getFullYear();
+var m = today.getMonth() - birthDate.getMonth();
+if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+}
+this.age=age;
+this.count=true;
+}
+
+}
+///////////////////
+html
+<div style="text-align:center">
+  <h1>
+    {{title}}!
+  </h1>
+  <div style="width:100%;"><br>
+<input id="date" #date type="date">
+<button btnCheckbox value="multi" id="multi" (click)="getage(date.value)" >Get Age</button>
+  </div><br><br>
+<div *ngIf="count == true" id="age">Your age is {{age}}
+
+</div>
+</div>
+/////////////////////////////////////////////////////////////////////
+
+2.ts
+export class AppComponent {
+  title='Calculator';
+
+  result:number;
+getnum(num1,num2){
+      this.result=num1*num2;
+}
+}
+///////////////////////
+html
+<div style="text-align:center">
+  <h1>
+    {{title}}!
+  </h1>
+  <div style="width:100%;"><br>
+<input id="textbox1" #num1 type="number"><br><br>
+<input id="textbox2" #num2 type="number"><br><br>
+
+<button type="submit"(click)="getnum(num1.value,num2.value)" >Multiply</button>
+  </div><br><br>
+
+  <div id="result">
+ {{result}}
+</div>
+</div>
+////////////////////////////////////////////////////////
+3.ts
+export class AppComponent {
+  title='Calculator';
+
+  result:number;
+getnum(num1,num2){
+      this.result=num1*num2;
+}
+getdivide(num1,num2){
+  this.result=num1/num2;
+}
+}
+/////////////////
+html
+div style="text-align:center">
+  <h1>
+    {{title}}!
+  </h1>
+  <div style="width:100%;"><br>
+<input id="textbox1" #num1 type="number"><br><br>
+<input id="textbox2" #num2 type="number"><br><br>
+
+<button type="submit"(click)="getnum(num1.value,num2.value)" >Multiply</button>
+<button type="submit"(click)="getdivide(num1.value,num2.value)" >Divide</button>
+
+  </div><br><br>
+  <div id="result">
+ {{result}}
+</div>
+</div>
+/////////////////////////////////////////////////////////////
+4.
+html:
+<div class="outer-outlet">
+  <router-outlet></router-outlet>
+</div>
+///////////
+home.component.ts
+
+import{Component} from '@angular/core';
+@Component({
+    template:'<div style="width:350px;height:200px"><h3>Welcome</h3>'
+})
+export class HomeComponent{
+
+}
+//////////////////////
+app.module.ts:
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import{HomeComponent} from './home.component'
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+//////////////////////////////////////
+routing module.ts
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home.component';
+
+const routes: Routes = [{
+  path:'',component:HomeComponent
+}];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+ 
+ }
+/////////////////////////////////////////////
+
+5.app.component.html:
+
+<div style="text-align:right">
+  <h1>
+    Welcome to Q2
+  </h1>
+  </div>
+UserName<input id="username" #username type="text"><br><br>
+password<input id="password" type="password"><br><br>
+mobile<input id="mobile" #mobile type="number"><br><br>
+Email<input id="Email" #Email type="email"><br><br>
+<button (click)="user(username.value)">Register</button>
+
+<div class="outer-outlet">
+  <router-outlet></router-outlet>
+</div>
+.........................................
+app.routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import{RegisterComponent} from './register/register.component'
+
+const routes: Routes = [
+ 
+  {path:'\register',component:RegisterComponent}];
+
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+ 
+ }
+..........................................
+app.component.ts
+
+import { Component } from '@angular/core';
+import { compileNgModuleFromRender2 } from '@angular/compiler/src/render3/r3_module_compiler';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.styl']
+})
+export class AppComponent {
+  constructor(private router: Router) {}
+
+user(value){
+localStorage.setItem("username",value);
+this.router.navigateByUrl('\register');
+}
+}
+
+........................................
+register.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.styl']
+})
+export class RegisterComponent implements OnInit {
+public name:String;
+  constructor() { 
+    this.name=localStorage.getItem("username");
+  }
+
+  ngOnInit() {
+  }
+} 
+
+////////////////////////////////////////////////////////////////
+6.app.component.html
+
+
+<div style="text-align:center">
+  <h1>
+    Welcome to Q3
+  </h1>
+ <a [routerLink]="['\register']">Register</a>
+<div class="outer-outlet"></div>
+  <router-outlet></router-outlet>
+</div>
+................................................
+app.routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import{RegisterComponent} from './register/register.component'
+
+const routes: Routes = [
+ 
+  {path:'\register',component:RegisterComponent}];
+
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+ 
+}
+............................................
+register component.html
+<div style="text-align:center">
+  
+UserName<input id="username" #username type="text"><br><br>
+password<input id="password" type="password"><br><br>
+mobile<input id="mobile" #mobile type="number"><br><br>
+Email<input id="Email" #Email type="email"><br><br>
+<button (click)="user(username.value)">Register</button>
+</div>
+..............................
+register.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.styl']
+})
+export class RegisterComponent implements OnInit {
+public name:String;
+  constructor() { 
+  }
+  user(value){
+    alert("Registered successfully"+value);
+  }
+
+  ngOnInit() {
+  }
+} 
+//////////////////////////////////////////////////////////////////////////
+7.home.component.html
+<div style="text-align:center">
+  <h1>
+    Welcome to Q6
+  </h1>
+  </div>
+  <div style="text-align:left">
+UserName<input id="username" #username type="text"><br><br>
+password<input id="password" type="password"><br><br>
+<button (click)="user(username.value)">Register</button>
+  </div>
+<div class="outer-outlet">
+  <router-outlet></router-outlet>
+</div>
+............................
+home.component.ts
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.styl']
+})
+export class HomeComponent implements OnInit {
+
+
+  constructor(private router: Router) {}
+
+  user(value){
+  localStorage.setItem("username",value);
+  this.router.navigateByUrl('\register');
+  }
+
+  ngOnInit() {
+  }
+
+}
+...............................................
+register.component.html
+<div style="text-align:center">
+    <h1>
+      Welcome to Q6
+    </h1>
+    </div>
+    <div style="text-align:left">
+
+Welcome {{name}}
+    </div>
+.......................................
+register.component.ts
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.styl']
+})
+export class RegisterComponent implements OnInit {
+  public name:String;
+  constructor() { 
+    this.name=localStorage.getItem("username");
+  }
+
+  ngOnInit() {
+  }
+}
+..................................................
+app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import{HomeComponent} from './home/home.component'
+import{RegisterComponent} from './register/register.component'
+
+const routes: Routes = [
+  
+  {path:'',component:HomeComponent},
+  {path:'\register',component:RegisterComponent}];
+
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+ 
+}
+/////////////////////////////////////////////////////////////////////////////
+9.register.component.html
+<div style="text-align:center">
+    UserName<input id="username" #username type="text">
+    password<input id="password" type="password">
+
+    <button (click)="user(username.value)">Login</button><br>
+    <div *ngIf="count == true" >Welcome {{name}}</div>
+........................................
+register.component.ts
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.styl']
+})
+export class RegisterComponent implements OnInit {
+  public name:String;
+  count=false;
+  user(value){
+    this.name=value;
+    this.count=true;
+  }
+
+  ngOnInit() {
+  }
+} 
+...................................................
+app.component.html
+
+<div style="text-align:center">
+  <h1>
+    Welcome to Q9
+  </h1>
+
+  <a [routerLink]="['\register']">Register</a>  </div>
+  
+<div class="outer-outlet">
+  <router-outlet></router-outlet>
+</div>
+..................................................
+8.
+register.component.html
+<div style="text-align:center">
+    UserName<input id="username" #username type="text">
+    password<input id="password" type="password">
+
+    <button (click)="user(username.value)">Login</button><br>
+    <div *ngIf="count == true" >Welcome {{name}}</div>
+    .............................................................
+register.component.ts
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.styl']
+})
+export class RegisterComponent implements OnInit {
+  public name:String;
+  count=false;
+  user(value){
+    this.name=value;
+    this.count=true;
+  }
+
+  ngOnInit() {
+  }
+}.....................................................
+app.component.ts
+import { Component } from '@angular/core';
+import { compileNgModuleFromRender2 } from '@angular/compiler/src/render3/r3_module_compiler';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.styl']
+})
+export class AppComponent {
+  public name:String;
+  count=false;
+  user(value){
+    this.name=value;
+    this.count=true;
+  }
+}..............................................................
+app.component.html
+
+<div style="text-align:center">
+  <h1>
+    Welcome to Q8
+  </h1>
+  <div style="text-align:left">
+    Email<input id="email" #email type="email"><br><br>
+    password<input id="password" type="password"><br><br>
+    <button (click)="user(email.value)">Login</button>
+    
+  <div *ngIf="count == true" >Email entered is {{name}}</div>
+</div>
+<div class="outer-outlet">
+  <router-outlet></router-outlet>
+</div>
+.........................................................
+app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import{HomeComponent} from './home/home.component'
+import{RegisterComponent} from './register/register.component'
+
+const routes: Routes = [
+  
+]
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+ 
+}
+/////////////////////////////////////////////////////////////////
+10.app.component.ts
+import { Component } from '@angular/core';
+import { compileNgModuleFromRender2 } from '@angular/compiler/src/render3/r3_module_compiler';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.styl']
+})
+export class AppComponent {
+  public res:number;
+
+  user(value){
+    this.res=(value * 9/5)+32;
+  
+  }
+}
+.....................................................
+app.component.html
+
+<div style="text-align:center">
+  <h1>
+    Welcome to Fahrenheit!
+  </h1>
+  
+    Enter the number to convert into Fahrenheit<input id="txt" #txt type="number">
+    <button (click)="user(txt.value)">Convert</button><br>
+</div>
+<div style="text-align:center"> 
+The fahrenheit of {{txt.value}}C is {{res}}F
+</div> 
+///////////////////////////////////////////////////////////////////////////
+
+11.app.component.ts
+import { Component } from '@angular/core';
+import { compileNgModuleFromRender2 } from '@angular/compiler/src/render3/r3_module_compiler';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.styl']
+})
+export class AppComponent {
+  public res:number;
+
+  user(value){
+    this.res=(value * 100);
+  
+  }
+}.....................................................................
+app.component.html
+
+<div style="text-align:center">
+  <h1>
+    Welcome to Percentage!
+  </h1>
+  
+    Enter the number to convert into Percentage<input id="txt" #txt type="number">
+    <button (click)="user(txt.value)">Convert</button><br>
+</div>
+<div style="text-align:center"> 
+The percentage of {{txt.value}} is {{res}}%
+</div>  
+/////////////////////////////////////////////////////////////////////////
+12.app.component.ts
+
+import { Component } from '@angular/core';
+import { compileNgModuleFromRender2 } from '@angular/compiler/src/render3/r3_module_compiler';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.styl']
+})
+export class AppComponent {
+  public name:String;
+  public count
+  user(value){
+    if(value>=18)
+    this.count=true;
+    else
+    this.count=false;
+  }
+}
+
+......................................................
+app.component.html
+
+<div style="text-align:center">
+  <h1>
+    Welcome to vote!
+  </h1>
+  
+    Enter age<input id="txt" #txt type="number"><br>
+    <button (click)="user(txt.value)">Convert</button><br>
+</div>
+<div style="text-align:center"> 
+  <div *ngIf="count == true" >Eligible</div>
+  <div *ngIf="count == false" >Not Eligible</div>
+</div>
+////////////////////////////////////////////////////////////////////////////////////////////////
